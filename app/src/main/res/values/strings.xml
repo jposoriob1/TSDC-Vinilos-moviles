@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">TSDC</string>
+    <string name="title_activity_albumes">AlbumesActivity</string>
+    <string name="title_activity_artistas">ArtistasActivity</string>
+    <string name="title_activity_coleccionistas">ColeccionistasActivity</string>
 </resources>
