@@ -13,17 +13,17 @@
         android:theme="@style/Theme.TSDC"
         tools:targetApi="31" >
         <activity
-            android:name=".ColeccionistasActivity"
+            android:name=".ui.view.ColeccionistasActivity"
             android:exported="false"
             android:label="@string/title_activity_coleccionistas"
             android:theme="@style/Theme.TSDC" />
         <activity
-            android:name=".ArtistasActivity"
+            android:name=".ui.view.ArtistasActivity"
             android:exported="false"
             android:label="@string/title_activity_artistas"
             android:theme="@style/Theme.TSDC" />
         <activity
-            android:name=".AlbumesActivity"
+            android:name=".ui.view.AlbumesActivity"
             android:exported="false"
             android:label="@string/title_activity_albumes"
             android:theme="@style/Theme.TSDC" />

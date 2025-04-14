@@ -21,6 +21,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tsdc.ui.theme.TSDCTheme
+import com.example.tsdc.ui.view.AlbumesActivity
+import com.example.tsdc.ui.view.ArtistasActivity
+import com.example.tsdc.ui.view.ColeccionistasActivity
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
