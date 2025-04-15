@@ -31,7 +31,7 @@ class AlbumesActivity : ComponentActivity() {
         setContent {
             TSDCTheme {
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("http://host.docker.internal:3000/")
+                    .baseUrl("http://192.168.1.109:3000/")
 
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
@@ -40,8 +40,10 @@ class AlbumesActivity : ComponentActivity() {
                 val repository = AlbumsRepository(service)
                 val viewModel = AlbumsViewModel(repository)
 
-                AlbumesScreen(viewModel = viewModel)
-                println("Retrofit y ViewModel inicializados")
+                AlbumesScreen(viewModel = viewModel) {
+                    finish()
+                }
+
             }
         }
     }

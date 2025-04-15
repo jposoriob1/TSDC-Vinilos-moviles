@@ -19,7 +19,7 @@ class AlbumsViewModel(private val repository: AlbumsRepository) : ViewModel() {
         viewModelScope.launch {
             try {
                 val result = repository.getAlbums()
-
+                println(result)
                 _albums.value = result
             } catch (e: Exception) {
                 // pa manejar error
