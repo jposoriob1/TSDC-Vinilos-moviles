@@ -16,12 +16,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tsdc.R
 import com.example.tsdc.ui.theme.TSDCTheme
-import com.example.tsdc.data.repository.AlbumsRepository
-import com.example.tsdc.data.service.AlbumsService
-import com.example.tsdc.ui.viewmodel.AlbumsViewModel
-import com.example.tsdc.ui.view.AlbumesScreen
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class AlbumesActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -30,21 +24,45 @@ class AlbumesActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             TSDCTheme {
-                val retrofit = Retrofit.Builder()
-                    .baseUrl("http://192.168.1.109:3000/")
-
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build()
-
-                val service = retrofit.create(AlbumsService::class.java)
-                val repository = AlbumsRepository(service)
-                val viewModel = AlbumsViewModel(repository)
-
-                AlbumesScreen(viewModel = viewModel) {
-                    finish()
+                Scaffold(
+                    topBar = {
+                        TopAppBar(
+                            title = { Text("Albumes") },
+                            navigationIcon = {
+                                IconButton(onClick = { finish() }) {
+                                    Icon(
+                                        Icons.AutoMirrored.Filled.ArrowBack,
+                                        contentDescription = "Back"
+                                    )
+                                }
+                            },
+                            actions = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.logo),
+                                    contentDescription = "Logo",
+                                    modifier = Modifier.size(32.dp)
+                                )
+                            }
+                        )
+                    },
+                    modifier = Modifier.fillMaxSize()
+                ) { innerPadding ->
+                    Greeting(
+                        name = "Android",
+                        modifier = Modifier.padding(innerPadding)
+                    )
                 }
-
             }
         }
+    }
+
+    @Composable
+    fun Greeting(name: String, modifier: Modifier) {
+        Text(
+            text = "Hello $name!",
+            modifier = modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        )
     }
 }

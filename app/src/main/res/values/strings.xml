@@ -3,5 +3,4 @@
     <string name="title_activity_albumes">AlbumesActivity</string>
     <string name="title_activity_artistas">ArtistasActivity</string>
     <string name="title_activity_coleccionistas">ColeccionistasActivity</string>
-    <string name="title_activity_create_album">CreateAlbumActivity</string>
 </resources>
