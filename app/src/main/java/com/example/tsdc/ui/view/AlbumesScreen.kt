@@ -44,7 +44,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                     onClick = { onBack() },
                     modifier = Modifier
                         //.align(Alignment.CenterStart)
-                        .offset(y = 20.dp) // <- aquí se sube la flecha
+                        .offset(y = 20.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
@@ -75,7 +75,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text("Álbumes", style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.height(8.dp))
-                    FilledButtonExample()
+                    CreateAlbumButton()
                 }
             }
         }
@@ -98,7 +98,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
 }
 
 @Composable
-fun FilledButtonExample() {
+fun CreateAlbumButton() {
     val context = LocalContext.current
 
     Button(
