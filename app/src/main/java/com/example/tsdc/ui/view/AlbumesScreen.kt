@@ -1,5 +1,5 @@
 package com.example.tsdc.ui.view
-
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,12 +22,13 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
     val albums by viewModel.albums.collectAsState()
-
+    val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.fetchAlbums()
     }
@@ -74,6 +75,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                     Spacer(modifier = Modifier.height(4.dp))
                     Text("Álbumes", style = MaterialTheme.typography.titleLarge)
                     Spacer(modifier = Modifier.height(8.dp))
+                    FilledButtonExample()
                 }
             }
         }
@@ -92,6 +94,20 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                 }
             }
         }
+    }
+}
+
+@Composable
+fun FilledButtonExample() {
+    val context = LocalContext.current
+
+    Button(
+        onClick = {
+            val intent = Intent(context, CreateAlbumActivity::class.java)
+            context.startActivity(intent)
+        }
+    ) {
+        Text(text = "CREAR ÁLBUM +")
     }
 }
 
