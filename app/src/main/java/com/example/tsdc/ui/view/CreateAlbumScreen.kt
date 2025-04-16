@@ -12,7 +12,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.tsdc.ui.view.FilledButtonExample
+import com.example.tsdc.ui.view.CreateAlbumButton
 import java.lang.reflect.Modifier
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -29,7 +29,7 @@ fun CreateAlbumScreen(onBack: () -> Unit) {
                     onClick = { onBack() },
                     modifier = androidx.compose.ui.Modifier
                         //.align(Alignment.CenterStart)
-                        .offset(y = 20.dp) // <- aquí se sube la flecha
+                        .offset(y = 20.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
