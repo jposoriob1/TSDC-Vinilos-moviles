@@ -44,7 +44,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                     onClick = { onBack() },
                     modifier = Modifier
                         //.align(Alignment.CenterStart)
-                        .offset(y = 20.dp)
+                        .offset(y = 10.dp)
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
