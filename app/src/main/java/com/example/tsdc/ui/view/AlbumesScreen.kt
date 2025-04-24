@@ -23,6 +23,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -88,7 +90,7 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
                     .padding(16.dp)
             )
         } else {
-            LazyColumn(modifier = Modifier.padding(paddingValues)) {
+            LazyColumn(modifier = Modifier.padding(paddingValues).testTag("lista_albumes")) {
                 items(albums) { album ->
                     AlbumItem(album)
                 }
