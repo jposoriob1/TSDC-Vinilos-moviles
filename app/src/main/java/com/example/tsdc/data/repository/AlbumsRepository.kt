@@ -8,4 +8,9 @@ class AlbumsRepository(private val albumsService: AlbumsService) {
     suspend fun getAlbums(): List<AlbumDto> {
         return albumsService.getAlbums()
     }
+
+    suspend fun getAlbumById(id: Int): AlbumDto {
+        return albumsService.getAlbumById(id)
+    }
+
 }

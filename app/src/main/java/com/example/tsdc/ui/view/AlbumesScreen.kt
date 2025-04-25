@@ -24,11 +24,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
+import androidx.compose.foundation.clickable
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
+fun AlbumesScreen(
+    viewModel: AlbumsViewModel,
+    onBack: () -> Unit,
+    onAlbumClick: (Int) -> Unit
+) {
     val albums by viewModel.albums.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(Unit) {
@@ -92,12 +97,13 @@ fun AlbumesScreen(viewModel: AlbumsViewModel, onBack: () -> Unit) {
         } else {
             LazyColumn(modifier = Modifier.padding(paddingValues).testTag("lista_albumes")) {
                 items(albums) { album ->
-                    AlbumItem(album)
+                    AlbumItem(album = album, onClick = { onAlbumClick(album.id) })
+                }
                 }
             }
         }
     }
-}
+
 
 @Composable
 fun CreateAlbumButton() {
@@ -114,11 +120,12 @@ fun CreateAlbumButton() {
 }
 
 @Composable
-fun AlbumItem(album: AlbumDto) {
+fun AlbumItem(album: AlbumDto, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick() },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFD0BCFF)),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(16.dp)
