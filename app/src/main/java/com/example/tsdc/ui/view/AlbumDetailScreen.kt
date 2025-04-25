@@ -30,6 +30,7 @@ import androidx.compose.ui.unit.*
 import java.util.Locale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
+import com.example.tsdc.ui.state.AlbumDetailUiState
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
@@ -43,7 +44,7 @@ fun AlbumDetailScreen(
     viewModel: AlbumDetailViewModel,
     onBack: () -> Unit
 ) {
-    val album by viewModel.album.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(albumId) {
         viewModel.fetchAlbumById(albumId)
@@ -87,12 +88,49 @@ fun AlbumDetailScreen(
             }
         }
     ) { padding ->
-        album?.let { AlbumDetailContent(it, Modifier.padding(padding)) }
-            ?: Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
+        when (uiState) {
+            is AlbumDetailUiState.Loading -> {
+                Box(modifier = Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
             }
+
+            is AlbumDetailUiState.Error -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text(
+                        text = "Error: ${(uiState as AlbumDetailUiState.Error).message}",
+                        color = Color.Red
+                    )
+                }
+            }
+
+            is AlbumDetailUiState.Empty -> {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(padding)
+                        .padding(horizontal = 16.dp)
+                ) {
+                    Text("No se encontró el álbum")
+                }
+            }
+
+            is AlbumDetailUiState.Success -> {
+                val album = (uiState as AlbumDetailUiState.Success).album
+                AlbumDetailContent(album, Modifier.padding(padding))
+            }
+        }
     }
-}
+    }
 
 @Composable
 fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
