@@ -37,6 +37,11 @@
             android:label="@string/title_activity_create_album"
             android:theme="@style/Theme.TSDC" />
         <activity
+                android:name=".ui.view.AlbumDetailActivity"
+                android:exported="false"
+                android:label="Detalle del Álbum"
+                android:theme="@style/Theme.TSDC" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="MainActivity"
