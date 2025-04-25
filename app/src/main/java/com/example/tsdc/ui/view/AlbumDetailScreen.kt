@@ -29,6 +29,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.*
 import java.util.Locale
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.testTag
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
@@ -122,7 +123,7 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                     .verticalScroll(scrollState)
                     .padding(16.dp)
             ) {
-                Text(album.name, style = MaterialTheme.typography.titleLarge)
+                Text(album.name, style = MaterialTheme.typography.titleLarge,modifier = Modifier.testTag("detalle_nombre_album"))
                 Text("Fecha de lanzamiento: ${formatFecha(album.releaseDate)}")
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -143,13 +144,13 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text("Descripción", fontWeight = FontWeight.Bold)
-                Text(album.description)
+                Text(album.description, modifier = Modifier.testTag("detalle_descripcion_album"))
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text("Canciones", fontWeight = FontWeight.Bold)
                 album.tracks.forEach {
-                    Text("• ${it.name}")
+                    Text("• ${it.name}", modifier = Modifier.testTag("detalle_track_${it.name}"))
                 }
 
                 Spacer(modifier = Modifier.height(16.dp))
@@ -168,19 +169,19 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text("Género(s)", fontWeight = FontWeight.Bold)
-                Text(album.genre)
+                Text(album.genre, modifier = Modifier.testTag("detalle_genero_album"))
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text("Artista/Banda", fontWeight = FontWeight.Bold)
                 album.performers.forEach {
-                    Text("• ${it.name}")
+                    Text("• ${it.name}",modifier = Modifier.testTag("detalle_artista_${it.name}"))
                 }
 
                 Spacer(modifier = Modifier.height(8.dp))
 
                 Text("Sello discográfico", fontWeight = FontWeight.Bold)
-                Text(album.recordLabel)
+                Text(album.recordLabel, modifier = Modifier.testTag("detalle_sello_album"))
 
                 Spacer(modifier = Modifier.height(8.dp))
 
