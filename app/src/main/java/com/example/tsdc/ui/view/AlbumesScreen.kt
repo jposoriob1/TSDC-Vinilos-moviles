@@ -25,6 +25,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.foundation.clickable
+import com.example.tsdc.ui.state.AlbumsUiState
+
+
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +37,6 @@ fun AlbumesScreen(
     onBack: () -> Unit,
     onAlbumClick: (Int) -> Unit
 ) {
-    val albums by viewModel.albums.collectAsState()
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         viewModel.fetchAlbums()
@@ -87,24 +89,57 @@ fun AlbumesScreen(
             }
         }
     ) { paddingValues ->
-        if (albums.isEmpty()) {
-            Text(
-                text = "No hay álbumes disponibles",
-                modifier = Modifier
-                    .padding(paddingValues)
-                    .padding(16.dp)
-            )
-        } else {
-            LazyColumn(modifier = Modifier.padding(paddingValues).testTag("lista_albumes")) {
-                items(albums) { album ->
-                    AlbumItem(album = album, onClick = { onAlbumClick(album.id) })
+
+        val uiState by viewModel.uiState.collectAsState()
+
+        // Este bloque reemplaza lo que tenías antes (if albums.isEmpty() else ...)
+        when (uiState) {
+            is AlbumsUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
                 }
+            }
+
+            is AlbumsUiState.Error -> {
+                val errorMsg = (uiState as AlbumsUiState.Error).message
+                Text(
+                    text = "Error al cargar: $errorMsg",
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .padding(16.dp),
+                    color = Color.Red
+                )
+            }
+
+            is AlbumsUiState.Empty -> {
+                Text(
+                    text = "No hay álbumes disponibles",
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .padding(16.dp)
+                )
+            }
+
+            is AlbumsUiState.Success -> {
+                val albums = (uiState as AlbumsUiState.Success).albums
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .testTag("lista_albumes")
+                ) {
+                    items(albums) { album ->
+                        AlbumItem(album = album, onClick = { onAlbumClick(album.id) })
+                    }
                 }
             }
         }
     }
-
-
+}
 @Composable
 fun CreateAlbumButton() {
     val context = LocalContext.current
