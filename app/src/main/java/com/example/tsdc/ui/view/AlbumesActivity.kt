@@ -1,68 +1,44 @@
 package com.example.tsdc.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
 import com.example.tsdc.R
 import com.example.tsdc.ui.theme.TSDCTheme
+import com.example.tsdc.data.repository.AlbumsRepository
+import com.example.tsdc.data.service.AlbumsService
+import com.example.tsdc.ui.viewmodel.AlbumsViewModel
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class AlbumesActivity : ComponentActivity() {
-    @OptIn(ExperimentalMaterial3Api::class)
+    @OptIn(androidx.compose.material3.ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             TSDCTheme {
-                Scaffold(
-                    topBar = {
-                        TopAppBar(
-                            title = { Text("Albumes") },
-                            navigationIcon = {
-                                IconButton(onClick = { finish() }) {
-                                    Icon(
-                                        Icons.AutoMirrored.Filled.ArrowBack,
-                                        contentDescription = "Back"
-                                    )
-                                }
-                            },
-                            actions = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.logo),
-                                    contentDescription = "Logo",
-                                    modifier = Modifier.size(32.dp)
-                                )
-                            }
-                        )
-                    },
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
+                val retrofit = Retrofit.Builder()
+                    .baseUrl("http://10.0.2.2:3000/")
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build()
+
+                val service = retrofit.create(AlbumsService::class.java)
+                val repository = AlbumsRepository(service)
+                val viewModel = AlbumsViewModel(repository)
+
+                AlbumesScreen(
+                    viewModel = viewModel,
+                    onBack = { finish() },
+                    onAlbumClick = { albumId ->
+                        val intent = Intent(this, AlbumDetailActivity::class.java)
+                        intent.putExtra("albumId", albumId)
+                        startActivity(intent)
+                    }
+                )
             }
         }
-    }
-
-    @Composable
-    fun Greeting(name: String, modifier: Modifier) {
-        Text(
-            text = "Hello $name!",
-            modifier = modifier
-                .fillMaxSize()
-                .padding(16.dp)
-        )
     }
 }
