@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tsdc.data.repository.CollectorsRepository
 import com.example.tsdc.ui.state.CollectorsUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CollectorsViewModel(private val repository: CollectorsRepository) : ViewModel() {
 
@@ -18,11 +20,14 @@ class CollectorsViewModel(private val repository: CollectorsRepository) : ViewMo
 
         viewModelScope.launch {
             try {
-                val result = repository.getCollectors()
-                if (result.isEmpty()) {
-                    _uiState.value = CollectorsUiState.Empty
+                val result = withContext(Dispatchers.IO) {
+                    repository.getCollectors()
+                }
+
+                _uiState.value = if (result.isEmpty()) {
+                    CollectorsUiState.Empty
                 } else {
-                    _uiState.value = CollectorsUiState.Success(result)
+                    CollectorsUiState.Success(result)
                 }
             } catch (e: Exception) {
                 _uiState.value = CollectorsUiState.Error(e.message ?: "Error desconocido")

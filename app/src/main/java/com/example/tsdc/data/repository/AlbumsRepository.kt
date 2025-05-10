@@ -2,15 +2,29 @@ package com.example.tsdc.data.repository
 
 import com.example.tsdc.data.model.AlbumDto
 import com.example.tsdc.data.service.AlbumsService
+import com.example.tsdc.utils.CacheManager
 
 class AlbumsRepository(private val albumsService: AlbumsService) {
 
     suspend fun getAlbums(): List<AlbumDto> {
-        return albumsService.getAlbums()
+        val cached = CacheManager.getInstance().getAlbums()
+        if (cached != null && cached.isNotEmpty()) {
+            return cached
+        }
+
+        val fresh = albumsService.getAlbums()
+        CacheManager.getInstance().setAlbums(fresh)
+        return fresh
     }
 
     suspend fun getAlbumById(id: Int): AlbumDto {
-        return albumsService.getAlbumById(id)
-    }
+        val cached = CacheManager.getInstance().getAlbumById(id)
+        if (cached != null) {
+            return cached
+        }
 
+        val fresh = albumsService.getAlbumById(id)
+        CacheManager.getInstance().setAlbumById(id, fresh)
+        return fresh
+    }
 }
