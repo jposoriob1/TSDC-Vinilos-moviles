@@ -116,21 +116,30 @@ fun ArtistaDetailScreen(
 @Composable
 fun MusicoDetailContent(musico: MusicoDto) {
     val scrollState = rememberScrollState()
-    Card(
+
+    Column(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
-            .heightIn(min = 0.dp, max = 600.dp), // Ajusta el alto máximo si lo necesitas
-        colors = CardDefaults.cardColors(containerColor = Purple80),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(16.dp)
     ) {
-        Box{
-            Column(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .verticalScroll(scrollState)
-            ) {
+        // Título fuera del Card
+        Text(
+            text = "Información del Músico",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = Modifier
+                .padding(bottom = 8.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(scrollState),
+            colors = CardDefaults.cardColors(containerColor = Purple80),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
                 Text(musico.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_musico"))
                 Text("Fecha de nacimiento: ${formatFecha(musico.birthDate)}")
 
@@ -160,58 +169,75 @@ fun MusicoDetailContent(musico: MusicoDto) {
                 musico.albums.forEach {
                     Text("• ${it.name}", modifier = Modifier.testTag("detalle_Album_${it.name}"))
                 }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
         }
     }
 }
+
 
 
 @Composable
 fun BandaDetailContent(banda: BandaDto) {
     val scrollState = rememberScrollState()
-    Card(
+
+    Column(
         modifier = Modifier
             .padding(16.dp)
-            .fillMaxWidth()
-            .heightIn(min = 0.dp, max = 600.dp),
-        colors = CardDefaults.cardColors(containerColor = Purple80),
-        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
-        shape = RoundedCornerShape(16.dp)
     ) {
-        Column(
+        Text(
+            text = "Información de la Banda",
+            style = MaterialTheme.typography.titleLarge,
             modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(scrollState)
+                .padding(bottom = 8.dp)
+                .align(Alignment.CenterHorizontally)
+        )
+
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
                 .padding(16.dp)
+                .verticalScroll(scrollState),
+            colors = CardDefaults.cardColors(containerColor = Purple80),
+            elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+            shape = RoundedCornerShape(16.dp)
         ) {
-
-            Text(banda.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_musico"))
-            Text("Fecha de nacimiento: ${formatFecha(banda.creationDate)}")
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            AsyncImage(
-                model = banda.image,
-                contentDescription = "Imagen de la banda",
+            Column(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp),
-                contentScale = ContentScale.Crop
-            )
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Text(banda.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_musico"))
+                Text("Fecha de creación: ${formatFecha(banda.creationDate)}")
 
-            Spacer(modifier = Modifier.height(12.dp))
-            Text("Descripción", style = MaterialTheme.typography.titleMedium)
-            Text(banda.description)
+                Spacer(modifier = Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(12.dp))
-            Text("Álbumes", style = MaterialTheme.typography.titleMedium)
-            banda.albums.forEach {
-                Text("• ${it.name}")
+                AsyncImage(
+                    model = banda.image,
+                    contentDescription = "Imagen de la banda",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(200.dp),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Text("Descripción", style = MaterialTheme.typography.titleMedium)
+                Text(banda.description)
+
+                Spacer(modifier = Modifier.height(12.dp))
+                Text("Álbumes", style = MaterialTheme.typography.titleMedium)
+                banda.albums.forEach {
+                    Text("• ${it.name}")
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
             }
-
         }
     }
 }
+
 
 
 
