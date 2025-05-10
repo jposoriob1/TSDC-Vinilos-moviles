@@ -16,5 +16,13 @@ class ArtistasRepository(private val service: ArtistasService) {
         val bandas: List<BandaDto> = service.getBandas()
         return bandas
     }
+
+    suspend fun getMusicoById(id: Int): MusicoDto {
+        return service.getMusicoById(id)
+    }
+
+    suspend fun getBandaById(id: Int): BandaDto {
+        return service.getBandaById(id)
+    }
 }
 
