@@ -17,6 +17,11 @@
         android:theme="@style/Theme.TSDC"
         tools:targetApi="31" >
         <activity
+                android:name=".ui.view.ArtistaDetailActivity"
+                android:exported="false"
+                android:label="Detalle del Artista"
+                android:theme="@style/Theme.TSDC" />
+        <activity
             android:name=".ui.view.ColeccionistasActivity"
             android:exported="false"
             android:label="@string/title_activity_coleccionistas"
