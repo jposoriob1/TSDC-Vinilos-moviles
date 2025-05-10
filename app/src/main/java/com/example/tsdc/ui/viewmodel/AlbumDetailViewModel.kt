@@ -2,12 +2,13 @@ package com.example.tsdc.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.tsdc.data.model.AlbumDto
 import com.example.tsdc.data.repository.AlbumsRepository
 import com.example.tsdc.ui.state.AlbumDetailUiState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AlbumDetailViewModel(private val repository: AlbumsRepository) : ViewModel() {
     private val _uiState = MutableStateFlow<AlbumDetailUiState>(AlbumDetailUiState.Loading)
@@ -18,11 +19,14 @@ class AlbumDetailViewModel(private val repository: AlbumsRepository) : ViewModel
 
         viewModelScope.launch {
             try {
-                val result = repository.getAlbumById(id)
-                if (result != null) {
-                    _uiState.value = AlbumDetailUiState.Success(result)
+                val result = withContext(Dispatchers.IO) {
+                    repository.getAlbumById(id)
+                }
+
+                _uiState.value = if (result != null) {
+                    AlbumDetailUiState.Success(result)
                 } else {
-                    _uiState.value = AlbumDetailUiState.Empty
+                    AlbumDetailUiState.Empty
                 }
             } catch (e: Exception) {
                 _uiState.value = AlbumDetailUiState.Error(e.message ?: "Error desconocido")

@@ -7,11 +7,11 @@ import androidx.lifecycle.viewModelScope
 import com.example.tsdc.data.model.ArtistaDto
 import com.example.tsdc.data.model.TipoArtistaDto
 import com.example.tsdc.data.repository.ArtistasRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ArtistasViewModel(private val repository: ArtistasRepository) : ViewModel() {
-
-
 
     private val _artistas = MutableLiveData<List<ArtistaDto>>()
     val artistas: LiveData<List<ArtistaDto>> = _artistas
@@ -20,7 +20,7 @@ class ArtistasViewModel(private val repository: ArtistasRepository) : ViewModel(
     val tipoSeleccionado: LiveData<TipoArtistaDto> = _tipoSeleccionado
 
     init {
-        cargarArtistas() // carga inicial
+        cargarArtistas()
     }
 
     fun cambiarTipo(tipo: TipoArtistaDto) {
@@ -31,15 +31,19 @@ class ArtistasViewModel(private val repository: ArtistasRepository) : ViewModel(
     private fun cargarArtistas() {
         viewModelScope.launch {
             try {
-                _artistas.value = when (_tipoSeleccionado.value) {
-                    TipoArtistaDto.MUSICO -> repository.getMusicos()
-                    TipoArtistaDto.BANDA -> repository.getBandas()
-                    else -> emptyList()
+                val resultado = withContext(Dispatchers.IO) {
+                    when (_tipoSeleccionado.value) {
+                        TipoArtistaDto.MUSICO -> repository.getMusicos()
+                        TipoArtistaDto.BANDA -> repository.getBandas()
+                        else -> emptyList()
+                    }
                 }
+                _artistas.value = resultado
             } catch (e: Exception) {
-                // puedes loggear o manejar el error aquí si lo deseas
                 _artistas.value = emptyList()
             }
         }
     }
 }
+
+
