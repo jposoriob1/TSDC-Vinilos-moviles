@@ -22,7 +22,7 @@ class AlbumDetailActivity : ComponentActivity() {
             TSDCTheme {
 
                 val retrofit = Retrofit.Builder()
-                    .baseUrl("http://10.0.2.2:3000/")
+                    .baseUrl("https://back-vinilos-603543136039.us-central1.run.app/")
                     .addConverterFactory(GsonConverterFactory.create())
                     .build()
 

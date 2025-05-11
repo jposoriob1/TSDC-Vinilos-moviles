@@ -28,7 +28,7 @@ class ArtistaDetailActivity : ComponentActivity() {
         val tipoArtista = TipoArtistaDto.valueOf(tipoArtistaStr)
         Log.d("ArtistaDetail", "Recibido artistaId: $artistaId, tipo: $tipoArtistaStr")
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/") // ajusta si usas otra IP
+            .baseUrl("https://back-vinilos-603543136039.us-central1.run.app/") // ajusta si usas otra IP
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
