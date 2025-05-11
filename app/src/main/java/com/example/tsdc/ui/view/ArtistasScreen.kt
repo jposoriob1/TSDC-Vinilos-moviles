@@ -27,7 +27,7 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-
+import androidx.compose.ui.platform.testTag
 
 
 @Composable
@@ -77,7 +77,7 @@ fun ArtistasScreen(
                         fontWeight = FontWeight.Medium
                     )
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text("Artistas", style = MaterialTheme.typography.titleLarge)
+                    Text("Artistas", style = MaterialTheme.typography.titleLarge, modifier=Modifier.testTag("lista_artistas"))
                 }
             }
         }
@@ -159,7 +159,8 @@ fun ArtistaItem(artista: ArtistaDto, onClick: () -> Unit) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-            .clickable { onClick() },
+            .clickable { onClick() }
+            .testTag("card_artista_${artista.name}"),
         colors = CardDefaults.cardColors(containerColor = Color(0xFFD0BCFF)),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(16.dp)

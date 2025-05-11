@@ -128,6 +128,7 @@ fun MusicoDetailContent(musico: MusicoDto) {
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
+                .testTag("Información del Músico")
         )
 
         Card(
@@ -141,8 +142,7 @@ fun MusicoDetailContent(musico: MusicoDto) {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(musico.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_musico"))
-                Text("Fecha de nacimiento: ${formatFecha(musico.birthDate)}")
-
+                Text("Fecha de nacimiento: ${formatFecha(musico.birthDate)}", modifier = Modifier.testTag("Fecha_nacimiento"))
                 Spacer(modifier = Modifier.height(8.dp))
 
                 AsyncImage(
@@ -192,6 +192,7 @@ fun BandaDetailContent(banda: BandaDto) {
             modifier = Modifier
                 .padding(bottom = 8.dp)
                 .align(Alignment.CenterHorizontally)
+                .testTag("Información de la Banda")
         )
 
         Card(
@@ -208,8 +209,8 @@ fun BandaDetailContent(banda: BandaDto) {
                     .fillMaxSize()
                     .padding(16.dp)
             ) {
-                Text(banda.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_musico"))
-                Text("Fecha de creación: ${formatFecha(banda.creationDate)}")
+                Text(banda.name, style = MaterialTheme.typography.titleLarge, modifier = Modifier.testTag("detalle_nombre_banda"))
+                Text("Fecha de creación: ${formatFecha(banda.creationDate)}", modifier = Modifier.testTag("Fecha_creación"))
 
                 Spacer(modifier = Modifier.height(16.dp))
 
@@ -223,7 +224,7 @@ fun BandaDetailContent(banda: BandaDto) {
                 )
 
                 Spacer(modifier = Modifier.height(12.dp))
-                Text("Descripción", style = MaterialTheme.typography.titleMedium)
+                Text("Descripción", style = MaterialTheme.typography.titleMedium,modifier = Modifier.testTag("description_band"))
                 Text(banda.description)
 
                 Spacer(modifier = Modifier.height(12.dp))
