@@ -15,7 +15,7 @@ class TestArtistScreenApi {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun seMuestraDetalleDeArtist() {
+    fun seMuestraArtistas() {
         // Paso 1: Simula clic para abrir la pantalla de álbumes
         composeTestRule
             .onNodeWithText("ARTISTAS")
