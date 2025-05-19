@@ -18,7 +18,7 @@ Antes de correr la app, necesitas:
 ### Clonar el repositorio de la API REST (Backend)
 
 ```bash
-git clone https://github.com/TheSoftwareDesignLab/BackVynils.git
+git clone https://github.com/jameshell/BackVynilsModificado
 ```
 
 ### Clonar el repositorio de la app móvil (este repositorio)

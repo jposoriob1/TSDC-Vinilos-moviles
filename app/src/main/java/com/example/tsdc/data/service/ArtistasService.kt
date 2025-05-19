@@ -7,15 +7,15 @@ import retrofit2.http.Path
 
 interface ArtistasService {
 
-    @GET("musicians")
+    @GET("/musicians")
     suspend fun getMusicos(): List<MusicoDto>
 
-    @GET("bands")
+    @GET("/bands")
     suspend fun getBandas(): List<BandaDto>
 
-    @GET("musicians/{id}")
+    @GET("/musicians/{id}")
     suspend fun getMusicoById(@Path("id") id: Int): MusicoDto
 
-    @GET("bands/{id}")
+    @GET("/bands/{id}")
     suspend fun getBandaById(@Path("id") id: Int): BandaDto
 }

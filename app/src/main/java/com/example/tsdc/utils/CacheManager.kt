@@ -4,6 +4,7 @@ import android.util.SparseArray
 import com.example.tsdc.data.model.AlbumDto
 import com.example.tsdc.data.model.ArtistaDto
 import com.example.tsdc.data.model.CollectorDto
+import com.example.tsdc.data.model.TrackDto
 
 class CacheManager private constructor() {
 
@@ -23,6 +24,7 @@ class CacheManager private constructor() {
     private var musicosListCache: List<ArtistaDto>? = null
     private var bandasListCache: List<ArtistaDto>? = null
     private var collectorsListCache: List<CollectorDto>? = null
+    private var tracksListCache: List<TrackDto>? = null
 
     // Cache individuales por ID
     private val albumDetailCache = SparseArray<AlbumDto>()
@@ -38,7 +40,13 @@ class CacheManager private constructor() {
 
     fun getAlbumById(id: Int): AlbumDto? = albumDetailCache[id]
     fun setAlbumById(id: Int, album: AlbumDto) {
-        if (albumDetailCache[id] == null) albumDetailCache.put(id, album)
+        albumDetailCache.put(id, album)
+    }
+
+    // === Tracks ===
+    fun getTracks(): List<TrackDto>? = tracksListCache
+    fun setTracks(tracks: List<TrackDto>) {
+        tracksListCache = tracks
     }
 
     // === Músicos ===

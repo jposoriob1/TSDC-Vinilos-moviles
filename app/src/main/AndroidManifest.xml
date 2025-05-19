@@ -47,6 +47,11 @@
                 android:label="Detalle del Álbum"
                 android:theme="@style/Theme.TSDC" />
         <activity
+                android:name=".ui.view.TrackSelectionActivity"
+                android:exported="false"
+                android:label="Asociar Canciones"
+                android:theme="@style/Theme.TSDC" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

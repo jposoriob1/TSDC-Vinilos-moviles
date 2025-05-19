@@ -5,9 +5,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface CollectorsService {
-    @GET("collectors")
+    @GET("/collectors")
     suspend fun getCollectors(): List<CollectorDto>
 
-    @GET("collectors/{id}")
+    @GET("/collectors/{id}")
     suspend fun getCollectorById(@Path("id") id: Int): CollectorDto
 }

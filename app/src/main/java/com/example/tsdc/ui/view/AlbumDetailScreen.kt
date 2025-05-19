@@ -33,6 +33,7 @@ import androidx.compose.ui.platform.testTag
 import com.example.tsdc.ui.state.AlbumDetailUiState
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
+import android.content.Intent
 
 
 
@@ -126,17 +127,26 @@ fun AlbumDetailScreen(
 
             is AlbumDetailUiState.Success -> {
                 val album = (uiState as AlbumDetailUiState.Success).album
-                AlbumDetailContent(album, Modifier.padding(padding))
+                val context = LocalContext.current
+                AlbumDetailContent(
+                    album = album, 
+                    modifier = Modifier.padding(padding),
+                    onAssociateTrackClick = { albumId ->
+                        val intent = Intent(context, TrackSelectionActivity::class.java)
+                        intent.putExtra("albumId", albumId)
+                        context.startActivity(intent)
+                    }
+                )
             }
         }
     }
     }
 
 @Composable
-fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
+fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier, onAssociateTrackClick: (Int) -> Unit = {}) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
-
+    val context = LocalContext.current
 
     val thumbHeightDp = 40.dp
 
@@ -198,7 +208,7 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = {
-                        // Acción del botón
+                        onAssociateTrackClick(album.id)
                     }) {
                         Text("ASOCIAR CANCIÓN +")
                     }
