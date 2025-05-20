@@ -26,6 +26,7 @@
             android:exported="false"
             android:label="@string/title_activity_coleccionistas"
             android:theme="@style/Theme.TSDC" />
+        <activity android:name=".ui.view.CollectorDetailActivity" />
         <activity
             android:name=".ui.view.ArtistasActivity"
             android:exported="false"
