@@ -1,5 +1,6 @@
 package com.example.tsdc.data.repository
 
+import com.example.tsdc.data.model.AlbumCreateDto
 import com.example.tsdc.data.model.AlbumDto
 import com.example.tsdc.data.service.AlbumsService
 import com.example.tsdc.utils.CacheManager
@@ -26,5 +27,9 @@ class AlbumsRepository(private val albumsService: AlbumsService) {
         val fresh = albumsService.getAlbumById(id)
         CacheManager.getInstance().setAlbumById(id, fresh)
         return fresh
+    }
+
+    suspend fun createAlbum(album: AlbumCreateDto) {
+        albumsService.createAlbum(album)
     }
 }
