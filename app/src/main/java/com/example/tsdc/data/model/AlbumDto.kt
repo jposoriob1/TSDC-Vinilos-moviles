@@ -8,7 +8,7 @@ data class AlbumDto (
     val description: String,
     val genre: String,
     val recordLabel: String,
-    val tracks: List<TrackDto>,
-    val performers: List<PerformerDto>,
-    val comments: List<CommentDto>
+    val tracks: List<TrackDto> = emptyList(),
+    val performers: List<PerformerDto> = emptyList(),
+    val comments: List<CommentDto> = emptyList()
 )
