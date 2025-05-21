@@ -262,14 +262,12 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                                 val availableScrollSpace = scrollableSpacePx.coerceAtLeast(0)
 
 
-                                val scrollFraction =
+                                val scrollFraction = if (scrollState.maxValue > 0) {
                                     scrollState.value.toFloat() / scrollState.maxValue.toFloat()
-
-
-                                val thumbOffsetYPx = (scrollFraction * availableScrollSpace)
-
-                                    .coerceIn(0f, availableScrollSpace.toFloat())
-
+                                } else {
+                                    0f
+                                }
+                                val thumbOffsetYPx = (scrollFraction * availableScrollSpace).coerceIn(0f, availableScrollSpace.toFloat())
 
                                 IntOffset(x = 0, y = thumbOffsetYPx.roundToInt())
                             }
