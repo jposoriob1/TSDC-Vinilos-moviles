@@ -16,15 +16,19 @@ class CreateAlbumActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Crea Retrofit y el servicio
+
         val retrofit = Retrofit.Builder()
             .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
         val service = retrofit.create(AlbumsService::class.java)
-        val repository = AlbumsRepository(service)
+        val repository = AlbumsRepository(
+            albumsService = service,
+            albumsDao = (application as com.example.tsdc.VinylsApplication).database.albumsDao()
+        )
 
-        // Crea el ViewModel
+
+
         val viewModel = AlbumCreateViewModel(repository)
 
         setContent {

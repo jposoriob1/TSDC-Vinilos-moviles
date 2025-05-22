@@ -10,6 +10,7 @@ import com.example.tsdc.ui.theme.TSDCTheme
 import com.example.tsdc.data.repository.ArtistasRepository
 import com.example.tsdc.data.service.ArtistasService
 import com.example.tsdc.ui.viewmodel.ArtistasViewModel
+import com.example.tsdc.data.local.VinylRoomDatabase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,6 +18,7 @@ class ArtistasActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         setContent {
             TSDCTheme {
                 val retrofit = Retrofit.Builder()
@@ -25,7 +27,14 @@ class ArtistasActivity : ComponentActivity() {
                     .build()
 
                 val service = retrofit.create(ArtistasService::class.java)
-                val repository = ArtistasRepository(service)
+
+
+                val database = VinylRoomDatabase.getDatabase(applicationContext)
+                val musicosDao = database.musicosDao()
+                val bandasDao = database.bandasDao()
+
+
+                val repository = ArtistasRepository(service, musicosDao, bandasDao)
                 val viewModel = ArtistasViewModel(repository)
 
                 ArtistasScreen(

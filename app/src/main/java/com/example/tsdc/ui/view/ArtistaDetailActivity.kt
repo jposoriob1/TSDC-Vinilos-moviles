@@ -6,6 +6,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.Text
 import androidx.compose.runtime.remember
+import com.example.tsdc.data.local.VinylRoomDatabase
 import com.example.tsdc.ui.theme.TSDCTheme
 import com.example.tsdc.data.model.TipoArtistaDto
 import com.example.tsdc.data.repository.ArtistasRepository
@@ -21,19 +22,25 @@ class ArtistaDetailActivity : ComponentActivity() {
         val artistaId = intent.getIntExtra("artistaId", -1)
         if (artistaId == -1) {
             finish()
-            return // 👈 ¡importante!
+            return
         }
 
         val tipoArtistaStr = intent.getStringExtra("tipoArtista") ?: "MUSICO"
         val tipoArtista = TipoArtistaDto.valueOf(tipoArtistaStr)
         Log.d("ArtistaDetail", "Recibido artistaId: $artistaId, tipo: $tipoArtistaStr")
+
+        // Crear instancia de Retrofit
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://10.0.2.2:3000/") // ajusta si usas otra IP
+            .baseUrl("http://10.0.2.2:3000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
+        // Obtener DAOs y crear repositorio
+        val database = VinylRoomDatabase.getDatabase(applicationContext)
+        val musicosDao = database.musicosDao()
+        val bandasDao = database.bandasDao()
         val service = retrofit.create(ArtistasService::class.java)
-        val repository = ArtistasRepository(service)
+        val repository = ArtistasRepository(service, musicosDao, bandasDao)
 
         setContent {
             TSDCTheme {
