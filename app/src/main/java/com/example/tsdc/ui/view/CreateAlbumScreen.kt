@@ -1,15 +1,16 @@
 package com.example.tsdc.ui.view
 
+import android.app.DatePickerDialog
 import android.widget.Toast
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,22 +25,27 @@ import com.example.tsdc.R
 import com.example.tsdc.data.model.GenreDto
 import com.example.tsdc.data.model.RecordLabelDto
 import com.example.tsdc.ui.state.AlbumCreationState
-import com.example.tsdc.ui.viewmodel.AlbumCreateViewModel
-import java.util.Calendar
-import android.app.DatePickerDialog
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.shape.RoundedCornerShape
 import com.example.tsdc.ui.theme.Purple80
+import com.example.tsdc.ui.viewmodel.AlbumCreateViewModel
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import java.util.Calendar
 
+@Composable
+fun accesibleTextFieldColors(): TextFieldColors {
+    return TextFieldDefaults.colors(
+        focusedTextColor = Color.Black,
+        unfocusedTextColor = Color.Black,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
-                        onBack: () -> Unit) {
-
+fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
     val context = LocalContext.current
     val state = viewModel.creationState
     val calendar = Calendar.getInstance()
@@ -59,10 +65,9 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
 
     var name by remember { mutableStateOf("") }
     var cover by remember { mutableStateOf("") }
-    var releaseDate by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var genre by remember { mutableStateOf(GenreDto.FOLK) }
-    var recordLabel by remember{ mutableStateOf(RecordLabelDto.FUENTES)}
+    var recordLabel by remember { mutableStateOf(RecordLabelDto.FUENTES) }
 
     if (state is AlbumCreationState.Success) {
         Toast.makeText(context, "Álbum creado exitosamente", Toast.LENGTH_LONG).show()
@@ -117,14 +122,12 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
             modifier = Modifier
                 .padding(padding)
                 .padding(horizontal = 16.dp),
-
             colors = CardDefaults.cardColors(containerColor = Purple80),
             elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
             Column(
-                modifier = Modifier
-                    .padding(16.dp) ,
+                modifier = Modifier.padding(16.dp),
                 verticalArrangement = Arrangement.Top,
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
@@ -132,12 +135,14 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                     value = name,
                     onValueChange = { name = it },
                     label = { Text("Nombre") },
+                    colors = accesibleTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
                     value = cover,
                     onValueChange = { cover = it },
                     label = { Text("URL de portada") },
+                    colors = accesibleTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
@@ -145,6 +150,7 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                     onValueChange = {},
                     readOnly = true,
                     label = { Text("Fecha de lanzamiento") },
+                    colors = accesibleTextFieldColors(),
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { datePickerDialog.show() }
@@ -153,6 +159,7 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Descripción") },
+                    colors = accesibleTextFieldColors(),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -168,7 +175,10 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                         onValueChange = {},
                         readOnly = true,
                         label = { Text("Género") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGenre) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGenre)
+                        },
+                        colors = accesibleTextFieldColors(),
                         modifier = Modifier.menuAnchor().fillMaxWidth()
                     )
                     ExposedDropdownMenu(
@@ -199,7 +209,10 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                         onValueChange = {},
                         readOnly = true,
                         label = { Text("Sello discográfico") },
-                        trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLabel) },
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLabel)
+                        },
+                        colors = accesibleTextFieldColors(),
                         modifier = Modifier.menuAnchor().fillMaxWidth()
                     )
                     ExposedDropdownMenu(
@@ -226,7 +239,6 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                 ) {
                     Button(
                         onClick = {
-                            // Validación mínima antes de intentar formatear fecha
                             if (selectedDate.value == null) {
                                 Toast.makeText(context, "Por favor selecciona una fecha", Toast.LENGTH_SHORT).show()
                                 return@Button
@@ -249,15 +261,12 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                                 genre = genre,
                                 recordLabel = recordLabel
                             )
-                        },
+                        }
                     ) {
                         Text("Crear")
                     }
 
-                    Button(
-                        onClick = { onBack() },
-
-                    ) {
+                    Button(onClick = { onBack() }) {
                         Text("Cancelar")
                     }
                 }
@@ -275,6 +284,5 @@ fun CreateAlbumScreen(  viewModel: AlbumCreateViewModel,
                 }
             }
         }
-
     }
 }
