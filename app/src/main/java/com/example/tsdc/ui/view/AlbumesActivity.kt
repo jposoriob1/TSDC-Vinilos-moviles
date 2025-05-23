@@ -6,7 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.LaunchedEffect
-import com.example.tsdc.R
 import com.example.tsdc.ui.theme.TSDCTheme
 import com.example.tsdc.data.repository.AlbumsRepository
 import com.example.tsdc.data.service.AlbumsService
@@ -14,6 +13,7 @@ import com.example.tsdc.ui.viewmodel.AlbumsViewModel
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import androidx.lifecycle.ViewModelProvider
+
 
 class AlbumesActivity : ComponentActivity() {
 

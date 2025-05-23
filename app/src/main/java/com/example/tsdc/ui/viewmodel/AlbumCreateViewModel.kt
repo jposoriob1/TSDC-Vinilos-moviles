@@ -17,7 +17,6 @@ import com.example.tsdc.utils.CacheManager
 class AlbumCreateViewModel(private val repository: AlbumsRepository) : ViewModel() {
 
     var creationState by mutableStateOf<AlbumCreationState>(AlbumCreationState.Idle)
-        private set
 
     fun createAlbum(
         name: String,

@@ -1,3 +1,5 @@
+@file:Suppress("DuplicatedCode")
+
 package com.example.tsdc.ui.view
 
 import androidx.compose.foundation.Image
