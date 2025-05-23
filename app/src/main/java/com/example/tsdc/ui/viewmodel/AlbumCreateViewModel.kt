@@ -11,6 +11,7 @@ import com.example.tsdc.data.repository.AlbumsRepository
 import com.example.tsdc.ui.state.AlbumCreationState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import com.example.tsdc.utils.CacheManager
 
 
 class AlbumCreateViewModel(private val repository: AlbumsRepository) : ViewModel() {
@@ -44,6 +45,11 @@ class AlbumCreateViewModel(private val repository: AlbumsRepository) : ViewModel
                         recordLabel = recordLabel.value
                     )
                 )
+
+                CacheManager.getInstance().setAlbums(emptyList())
+
+                repository.refreshAlbums()
+
                 creationState = AlbumCreationState.Success
             } catch (e: Exception) {
                 creationState = AlbumCreationState.Error("Error al crear álbum: ${e.message}")

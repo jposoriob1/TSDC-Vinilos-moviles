@@ -7,6 +7,6 @@ data class BandaDto(
     override val description: String,
     val creationDate: String,
     val albums: List<AlbumDto>,
-    val musicians: List<MusicoDto>, // si necesitas cargar esta parte
+    val musicians: List<MusicoDto>,
     val performerPrizes: List<PremioDto>
 ) : ArtistaDto()

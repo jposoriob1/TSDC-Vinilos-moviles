@@ -3,6 +3,7 @@ package com.example.tsdc.ui.view
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import com.example.tsdc.VinylsApplication
 import com.example.tsdc.data.repository.AlbumsRepository
 import com.example.tsdc.data.service.AlbumsService
 import com.example.tsdc.ui.theme.TSDCTheme
@@ -27,7 +28,11 @@ class AlbumDetailActivity : ComponentActivity() {
                     .build()
 
                 val service = retrofit.create(AlbumsService::class.java)
-                val repository = AlbumsRepository(service)
+                val repository = AlbumsRepository(
+                    albumsService = service,
+                    albumsDao = (application as VinylsApplication).database.albumsDao()
+                )
+
                 val viewModel = AlbumDetailViewModel(repository)
 
 

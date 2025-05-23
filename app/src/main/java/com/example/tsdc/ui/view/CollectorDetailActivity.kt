@@ -7,6 +7,7 @@ import com.example.tsdc.data.repository.CollectorsRepository
 import com.example.tsdc.data.service.CollectorsService
 import com.example.tsdc.ui.theme.TSDCTheme
 import com.example.tsdc.ui.viewmodel.CollectorDetailViewModel
+import com.example.tsdc.data.local.VinylRoomDatabase
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -15,7 +16,10 @@ class CollectorDetailActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         val collectorId = intent.getIntExtra("collectorId", -1)
-        if (collectorId == -1) finish()
+        if (collectorId == -1) {
+            finish()
+            return
+        }
 
         setContent {
             TSDCTheme {
@@ -25,7 +29,13 @@ class CollectorDetailActivity : ComponentActivity() {
                     .build()
 
                 val service = retrofit.create(CollectorsService::class.java)
-                val repository = CollectorsRepository(service)
+
+
+                val database = VinylRoomDatabase.getDatabase(applicationContext)
+                val collectorsDao = database.collectorsDao()
+
+
+                val repository = CollectorsRepository(service, collectorsDao)
                 val viewModel = CollectorDetailViewModel(repository)
 
                 CollectorDetailScreen(

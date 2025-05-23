@@ -9,6 +9,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import androidx.lifecycle.ViewModelProvider
+
 
 class AlbumsViewModel(private val repository: AlbumsRepository) : ViewModel() {
 
@@ -34,4 +36,14 @@ class AlbumsViewModel(private val repository: AlbumsRepository) : ViewModel() {
             }
         }
     }
+    companion object {
+        fun provideFactory(repository: AlbumsRepository): ViewModelProvider.Factory =
+            object : ViewModelProvider.Factory {
+                @Suppress("UNCHECKED_CAST")
+                override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                    return AlbumsViewModel(repository) as T
+                }
+            }
+    }
 }
+
