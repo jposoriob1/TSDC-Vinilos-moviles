@@ -32,9 +32,12 @@ import androidx.compose.ui.unit.*
 import java.util.Locale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.window.Dialog
 import com.example.tsdc.ui.state.AlbumDetailUiState
+import com.example.tsdc.ui.state.TrackCreationState
 import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
+import android.widget.Toast
 
 
 
@@ -47,9 +50,29 @@ fun AlbumDetailScreen(
     onBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val trackCreationState by viewModel.trackCreationState.collectAsState()
+    val context = LocalContext.current
 
     LaunchedEffect(albumId) {
         viewModel.fetchAlbumById(albumId)
+    }
+
+    // Handle track creation state changes
+    LaunchedEffect(trackCreationState) {
+        when (trackCreationState) {
+            is TrackCreationState.Success -> {
+                Toast.makeText(context, "Canción agregada exitosamente", Toast.LENGTH_SHORT).show()
+                viewModel.resetTrackCreationState()
+            }
+            is TrackCreationState.Error -> {
+                Toast.makeText(
+                    context,
+                    "Error: ${(trackCreationState as TrackCreationState.Error).message}",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+            else -> {}
+        }
     }
 
     Scaffold(
@@ -128,23 +151,122 @@ fun AlbumDetailScreen(
 
             is AlbumDetailUiState.Success -> {
                 val album = (uiState as AlbumDetailUiState.Success).album
-                AlbumDetailContent(album, Modifier.padding(padding))
+                AlbumDetailContent(album, albumId, viewModel, Modifier.padding(padding))
             }
         }
     }
     }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
+fun AlbumDetailContent(album: AlbumDto, albumId: Int, viewModel: AlbumDetailViewModel, modifier: Modifier = Modifier) {
     val scrollState = rememberScrollState()
     val density = LocalDensity.current
+    val context = LocalContext.current
 
+    // State for showing/hiding the track creation dialog
+    var showTrackDialog by remember { mutableStateOf(false) }
+
+    // State for track name and duration
+    var trackName by remember { mutableStateOf("") }
+    var trackDuration by remember { mutableStateOf("") }
+
+    // Track creation dialog
+    if (showTrackDialog) {
+        Dialog(onDismissRequest = { showTrackDialog = false }) {
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                colors = CardDefaults.cardColors(containerColor = Purple80),
+                elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+                shape = RoundedCornerShape(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "Agregar Canción",
+                        style = MaterialTheme.typography.titleLarge,
+                        fontWeight = FontWeight.Bold
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    OutlinedTextField(
+                        value = trackName,
+                        onValueChange = { trackName = it },
+                        label = { Text("Nombre de la canción") },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    OutlinedTextField(
+                        value = trackDuration,
+                        onValueChange = { trackDuration = it },
+                        label = { Text("Duración (ej: 5:05)") },
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent
+                        )
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        Button(
+                            onClick = {
+                                if (trackName.isBlank() || trackDuration.isBlank()) {
+                                    Toast.makeText(context, "Todos los campos son obligatorios", Toast.LENGTH_SHORT).show()
+                                    return@Button
+                                }
+
+                                // Create the track
+                                viewModel.createTrack(albumId, trackName, trackDuration)
+
+                                // Close the dialog
+                                showTrackDialog = false
+
+                                // Reset the form
+                                trackName = ""
+                                trackDuration = ""
+                            }
+                        ) {
+                            Text("Guardar")
+                        }
+
+                        Button(
+                            onClick = { 
+                                showTrackDialog = false
+                                trackName = ""
+                                trackDuration = ""
+                            }
+                        ) {
+                            Text("Cancelar")
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     val thumbHeightDp = 40.dp
-
     val thumbHeightPx = with(density) { thumbHeightDp.roundToPx() }
-
-
     var trackHeightPx by remember { mutableStateOf(0) }
 
     Card(
@@ -156,7 +278,6 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
         shape = RoundedCornerShape(16.dp)
     ) {
         Box {
-
             Column(
                 modifier = Modifier
                     .padding(end = 16.dp)
@@ -200,7 +321,7 @@ fun AlbumDetailContent(album: AlbumDto, modifier: Modifier = Modifier) {
                     contentAlignment = Alignment.Center
                 ) {
                     Button(onClick = {
-                        // Acción del botón
+                        showTrackDialog = true
                     }) {
                         Text("ASOCIAR CANCIÓN +")
                     }

@@ -38,7 +38,7 @@ class CacheManager private constructor() {
 
     fun getAlbumById(id: Int): AlbumDto? = albumDetailCache[id]
     fun setAlbumById(id: Int, album: AlbumDto) {
-        if (albumDetailCache[id] == null) albumDetailCache.put(id, album)
+        albumDetailCache.put(id, album)
     }
 
     // === Músicos ===
@@ -49,7 +49,7 @@ class CacheManager private constructor() {
 
     fun getMusicoById(id: Int): ArtistaDto? = musicoDetailCache[id]
     fun setMusicoById(id: Int, musico: ArtistaDto) {
-        if (musicoDetailCache[id] == null) musicoDetailCache.put(id, musico)
+        musicoDetailCache.put(id, musico)
     }
 
     // === Bandas ===
@@ -60,7 +60,7 @@ class CacheManager private constructor() {
 
     fun getBandaById(id: Int): ArtistaDto? = bandaDetailCache[id]
     fun setBandaById(id: Int, banda: ArtistaDto) {
-        if (bandaDetailCache[id] == null) bandaDetailCache.put(id, banda)
+        bandaDetailCache.put(id, banda)
     }
 
     // === Coleccionistas ===
@@ -71,6 +71,6 @@ class CacheManager private constructor() {
 
     fun getCollectorById(id: Int): CollectorDto? = collectorDetailCache[id]
     fun setCollectorById(id: Int, collector: CollectorDto) {
-        if (collectorDetailCache[id] == null) collectorDetailCache.put(id, collector)
+        collectorDetailCache.put(id, collector)
     }
 }
