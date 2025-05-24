@@ -4,6 +4,8 @@ import com.example.tsdc.data.local.dao.AlbumsDao
 import com.example.tsdc.data.local.entity.Album
 import com.example.tsdc.data.model.AlbumCreateDto
 import com.example.tsdc.data.model.AlbumDto
+import com.example.tsdc.data.model.TrackCreateDto
+import com.example.tsdc.data.model.TrackDto
 import com.example.tsdc.data.service.AlbumsService
 import com.example.tsdc.utils.CacheManager
 
@@ -75,6 +77,16 @@ class AlbumsRepository(
 
     suspend fun createAlbum(album: AlbumCreateDto) {
         albumsService.createAlbum(album)
+    }
+
+    suspend fun createTrack(albumId: Int, track: TrackCreateDto): TrackDto {
+        val result = albumsService.createTrack(albumId, track)
+
+        // Refresh the album in cache to ensure we have the updated data with the new track
+        val updatedAlbum = albumsService.getAlbumById(albumId)
+        CacheManager.getInstance().setAlbumById(albumId, updatedAlbum)
+
+        return result
     }
 
     suspend fun refreshAlbums() {

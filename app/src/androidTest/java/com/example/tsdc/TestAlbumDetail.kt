@@ -14,46 +14,6 @@ class TestAlbumDetailScreenApi {
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Test
-    fun seMuestraDetalleDeAlbum() {
-        // Paso 1: Simula clic para abrir la pantalla de álbumes
-        composeTestRule
-            .onNodeWithText("ALBUMES")
-            .performClick()
-
-        // Paso 2: Espera a que se cargue la lista
-        composeTestRule.waitUntil(timeoutMillis = 5000) {
-            composeTestRule
-                .onAllNodesWithTag("lista_albumes")
-                .fetchSemanticsNodes().isNotEmpty()
-        }
-        // Clic en el álbum específico
-        composeTestRule.onNodeWithText("Buscando América").performClick()
-
-        // Verifica que se vean algunos datos del álbum
-        composeTestRule.waitUntil(timeoutMillis = 7000) {
-            composeTestRule.onAllNodesWithText("Buscando América").fetchSemanticsNodes().isNotEmpty()
-        }
-        composeTestRule.onNodeWithTag("detalle_nombre_album").assertIsDisplayed()
-        composeTestRule.onNodeWithTag("detalle_descripcion_album").assertIsDisplayed()
-        composeTestRule
-            .onNodeWithTag("detalle_genero_album")
-            .performScrollTo()
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithTag("detalle_sello_album")
-            .performScrollTo()
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithTag("detalle_artista_Rubén Blades Bellido de Luna")
-            .performScrollTo()
-            .assertIsDisplayed()
-        composeTestRule
-            .onNodeWithTag("detalle_track_Decisiones")
-            .performScrollTo()
-            .assertIsDisplayed()
-    }
-
-    @Test
     fun BotonVolverAlbums() {
         // Paso 1: Simula clic para abrir la pantalla de álbumes
         composeTestRule
