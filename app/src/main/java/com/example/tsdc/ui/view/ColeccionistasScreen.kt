@@ -12,7 +12,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.testTag
@@ -24,6 +23,9 @@ import com.example.tsdc.R
 import com.example.tsdc.data.model.CollectorDto
 import com.example.tsdc.ui.state.CollectorsUiState
 import com.example.tsdc.ui.viewmodel.CollectorsViewModel
+import androidx.compose.ui.platform.LocalContext
+import android.content.Intent
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,10 +134,17 @@ fun ColeccionistasScreen(
 
 @Composable
 fun CollectorItem(collector: CollectorDto) {
+    val context = LocalContext.current
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable {
+                val intent = Intent(context, CollectorDetailActivity::class.java)
+                intent.putExtra("collectorId", collector.id)
+                context.startActivity(intent)
+            },
         colors = CardDefaults.cardColors(containerColor = Color(0xFFD0BCFF)),
         elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
         shape = RoundedCornerShape(16.dp)
@@ -148,7 +157,7 @@ fun CollectorItem(collector: CollectorDto) {
             Text(
                 text = collector.name,
                 style = MaterialTheme.typography.titleMedium,
-                color = Color(0xFF4A148C) // Púrpura oscuro
+                color = Color(0xFF4A148C)
             )
             Text(
                 text = collector.email,
