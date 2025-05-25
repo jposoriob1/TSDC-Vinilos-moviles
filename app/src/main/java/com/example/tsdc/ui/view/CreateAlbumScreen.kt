@@ -287,8 +287,6 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
                             )
                         },
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp)
                             .testTag("album_boton_crear"),
                     ) {
                         Text("Crear")
