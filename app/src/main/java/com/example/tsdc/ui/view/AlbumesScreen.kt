@@ -148,7 +148,11 @@ fun CreateAlbumButton() {
         onClick = {
             val intent = Intent(context, CreateAlbumActivity::class.java)
             context.startActivity(intent)
-        }
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .testTag("boton_crear_album"),
     ) {
         Text(text = "CREAR ÁLBUM +")
     }

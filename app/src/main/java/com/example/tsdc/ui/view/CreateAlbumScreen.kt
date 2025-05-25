@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -50,12 +51,15 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
     val state = viewModel.creationState
     val calendar = Calendar.getInstance()
     val selectedDate = remember { mutableStateOf<LocalDate?>(null) }
+    var releaseDate by remember { mutableStateOf("") }
 
     val datePickerDialog = remember {
         DatePickerDialog(
             context,
             { _, year, month, dayOfMonth ->
-                selectedDate.value = LocalDate.of(year, month + 1, dayOfMonth)
+                val date = LocalDate.of(year, month + 1, dayOfMonth)
+                selectedDate.value = date
+                releaseDate = date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"))
             },
             calendar.get(Calendar.YEAR),
             calendar.get(Calendar.MONTH),
@@ -136,31 +140,45 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
                     onValueChange = { name = it },
                     label = { Text("Nombre") },
                     colors = accesibleTextFieldColors(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("album_nombre")
                 )
                 OutlinedTextField(
                     value = cover,
                     onValueChange = { cover = it },
                     label = { Text("URL de portada") },
                     colors = accesibleTextFieldColors(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("album_portada")
                 )
-                OutlinedTextField(
-                    value = selectedDate.value?.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) ?: "",
-                    onValueChange = {},
-                    readOnly = true,
-                    label = { Text("Fecha de lanzamiento") },
-                    colors = accesibleTextFieldColors(),
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable { datePickerDialog.show() }
-                )
+                ) {
+                    OutlinedTextField(
+                        value = releaseDate,
+                        onValueChange = { releaseDate = it },
+                        label = { Text("Fecha de lanzamiento") },
+                        colors = accesibleTextFieldColors(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { datePickerDialog.show() }
+                            .testTag("album_fecha"),
+//                        enabled = false
+                    )
+
+                }
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
                     label = { Text("Descripción") },
                     colors = accesibleTextFieldColors(),
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .testTag("album_descripcion")
                 )
 
                 Spacer(modifier = Modifier.height(8.dp))
@@ -179,7 +197,10 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedGenre)
                         },
                         colors = accesibleTextFieldColors(),
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .testTag("album_genero")
                     )
                     ExposedDropdownMenu(
                         expanded = expandedGenre,
@@ -213,7 +234,10 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = expandedLabel)
                         },
                         colors = accesibleTextFieldColors(),
-                        modifier = Modifier.menuAnchor().fillMaxWidth()
+                        modifier = Modifier
+                            .menuAnchor()
+                            .fillMaxWidth()
+                            .testTag("album_sello")
                     )
                     ExposedDropdownMenu(
                         expanded = expandedLabel,
@@ -261,12 +285,17 @@ fun CreateAlbumScreen(viewModel: AlbumCreateViewModel, onBack: () -> Unit) {
                                 genre = genre,
                                 recordLabel = recordLabel
                             )
-                        }
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp)
+                            .testTag("album_boton_crear"),
                     ) {
                         Text("Crear")
                     }
 
-                    Button(onClick = { onBack() }) {
+                    Button(onClick = { onBack() },
+                        modifier = Modifier.testTag("btnCancelar")) {
                         Text("Cancelar")
                     }
                 }
